@@ -14,6 +14,7 @@ create table if not exists user (
 create table if not exists cart (
     id_cart int not null auto_increment,
     id_user int not null,
+    checkout boolean not null default false,
     date_checkout timestamp,
     primary key (id_cart),
     foreign key (id_user) references user(id_user)
@@ -37,8 +38,8 @@ create table if not exists article (
 );
 
 create table if not exists cart_contains_article (
-    id_article int not null,
     id_cart int not null,
+    id_article int not null,
     qty_contains int default 1,
     primary key (id_article, id_cart),
     foreign key (id_article) references article(id_article),
