@@ -23,7 +23,7 @@ public class Lesson4 {
 		TableArticleManager tum = new TableArticleManager();
 		
 		TableArticle tu = new TableArticle();
-		tu.setId_article(4);
+		tu.setId_article(1);
 //		tu.setName_article("Nourriture");
 		
 //		tum.create(conn, tu);
@@ -32,7 +32,7 @@ public class Lesson4 {
 //		tum.delete(conn, tu);
 		
 		display_all(tum.readAll(conn, null));
-//		display_one(tum.read(conn, tu));
+		display_one(tum.read(conn, tu));
 		
 		conn.commit();
 	}

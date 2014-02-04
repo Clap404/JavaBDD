@@ -37,34 +37,17 @@ public class ResultSetMapper<T> {
 		List<T> output = new ArrayList<T>();
 		
 		ResultSetMetaData rsmd = rset.getMetaData();
-//		List<String> columns = new ArrayList<String>();
-		
-//		for( int i=rsmd.getColumnCount(); i >= 1; i-- ){
-//			columns.add( rsmd.getColumnLabel(i) );
-//		}
 		
 		try {
 		
 			while(rset.next()){
 				T bean;
 				bean = clazz.newInstance();
-//					
-//				Iterator<String> it = columns.iterator();
-//				while(it.hasNext()){
-//					String colLabel = it.next();
-//					Method setter = setters.get(colLabel);
-//					Object o = rset.getObject( colLabel );
-//					System.out.println(colLabel + o.getClass());
-//					
-//					setter.invoke(bean, o );
-//					
-//				}
 				
 				for( int i=rsmd.getColumnCount(); i >= 1; i-- ){
 					String colLabel = rsmd.getColumnLabel(i);
 					Method setter = setters.get(colLabel);
 					Object o = getObjectAs(rset, rsmd, i);
-					System.out.println(colLabel + o.getClass() + o.toString());
 					try {
 						setter.invoke(bean, o );
 					} catch (NullPointerException e) {
