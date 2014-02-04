@@ -6,9 +6,7 @@ import java.sql.ResultSet;
 import java.util.List;
 
 public class TableCategoryManager extends TableManager<TableCategory> {
-    
-//  protected ResultSetMapper<TableCategory> rsmp ; 
-    
+        
     TableCategoryManager(){
         this.rsmp = new ResultSetMapper<TableCategory>(TableCategory.class);
         this.psmp = new PreparedStatementMapper<TableCategory>(TableCategory.class);

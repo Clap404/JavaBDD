@@ -1,25 +1,13 @@
 package com.iut;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.List;
 
 public class Lesson4 {
 
 	public static void main(String[] args) throws Exception {
 		Connection conn = Singleton.DS.getConnection();
-		
-//		String sql = "Select * from user ;";
-//		Statement stmt = conn.createStatement();
-//		ResultSet rset = stmt.executeQuery(sql);
-//		
-//		ResultSetMapper<TableUser> rsmp = new ResultSetMapper<TableUser>(TableUser.class);
-//		
-//		List<TableUser> ltu = rsmp.mapRersultSetToObject(rset);
-//		
-//		display_all(ltu);
-//		
+				
 		TableArticleManager tum = new TableArticleManager();
 		
 		TableArticle tu = new TableArticle();
