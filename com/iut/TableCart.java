@@ -1,15 +1,20 @@
 package com.iut;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
 
 public class TableCart extends Table {
 	
+	private HashMap<Integer, Integer> content;
 	private int id_cart;
 	private int id_user;
 	private boolean checkout;
 	private Timestamp date_checkout;
-	
     
+	TableCart() {
+		content = new HashMap<Integer, Integer>();
+	}
+	
     @Column("id_cart")
     public int getId_cart() {
         return id_cart;
@@ -48,6 +53,15 @@ public class TableCart extends Table {
     @Column("checkout")
 	public void setCheckout(boolean checkout) {
 		this.checkout = checkout;
+	}
+    
+    @Column("content")
+	public HashMap<Integer, Integer> getContent() {
+		return content;
+	}
+	
+	public void addContent(int id_article, int qty) {
+		content.put(id_article, qty);
 	}
 	
 }

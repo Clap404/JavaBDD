@@ -13,7 +13,7 @@ public class TableArticleManager extends TableManager<TableArticle> {
     }
     
     public List<TableArticle> readAll(Connection conn, TableArticle bean){        
-        String sql = "select * from article ;";
+        String sql = "select * from article order by price_article ;";
         
         PreparedStatement pstm = preparedStatementWrapper(conn, sql);
         ResultSet rset = queryWrapper(pstm);
@@ -44,17 +44,17 @@ public class TableArticleManager extends TableManager<TableArticle> {
 
     @Override
     public int update(Connection conn, TableArticle bean) {
-        String sql = "update article set name_article = ?, password = ? where id_article = ?";
+        String sql = "update article set name_article = ? where id_article = ? ;";
         
         PreparedStatement pstm = preparedStatementWrapper(conn, sql);
-        pstmMapperWrapper(pstm, bean, "name_article", "password", "id_article");
+        pstmMapperWrapper(pstm, bean, "name_article", "id_article");
         
         return updateWrapper(pstm);
     }
 
     @Override
     public int delete(Connection conn, TableArticle bean) {
-        String sql = "delete from article where id_article = ?";
+        String sql = "delete from article where id_article = ? ;";
         
         PreparedStatement pstm = preparedStatementWrapper(conn, sql);
         pstmMapperWrapper(pstm, bean, "id_article");

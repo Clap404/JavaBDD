@@ -12,12 +12,12 @@ public class TableArticle extends Table {
     private String description_article;
     
     @Column("id_cat")
-    public int getCat_article() {
+    public int getId_cat() {
         return id_cat;
     }
     
     @Column("id_cat")
-    public void setCat_article(int id_cat) {
+    public void setId_cat(int id_cat) {
         this.id_cat = id_cat;
     }
     

@@ -26,12 +26,12 @@ public class TableContains extends Table {
         this.id_article = id_article;
     }
     
-    @Column("qty")
+    @Column("qty_contains")
     public int getQty() {
         return qty;
     }
     
-    @Column("qty")
+    @Column("qty_contains")
     public void setQty(int qty) {
         this.qty = qty;
     }

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.List;
+import java.util.Map.Entry;
 
 public class TableCartManager extends TableManager<TableCart> {
         
@@ -18,36 +19,74 @@ public class TableCartManager extends TableManager<TableCart> {
         PreparedStatement pstm = preparedStatementWrapper(conn, sql);
         ResultSet rset = queryWrapper(pstm);
         
-        return rsetMapperWrapper(rset);
+        List<TableCart> result = rsetMapperWrapper(rset);
+        
+        TableContainsManager tcm = new TableContainsManager(); 
+        
+        for(TableCart t : result){
+        	
+        	List<TableContains> contains = tcm.readAll(conn, t.getId_cart() );
+        	
+        	for(TableContains tcns : contains){
+        		t.addContent(tcns.getId_article(), tcns.getQty());
+        	}
+        }
+        
+        return result;
     }
 
     @Override
     public int create(Connection conn, TableCart bean) {
-        String sql = "insert into cart values( null, ?, null ) ;";
+        String sql = "insert into cart values( null, ?, false , null) ;";
                 
         PreparedStatement pstm = preparedStatementWrapper(conn, sql);
         pstmMapperWrapper(pstm, bean, "id_user");
         
-        return updateWrapper(pstm);
+//        HashMap<Integer,Integer> cartContent = bean.getContent();
+//        Iterator<Entry<Integer, Integer>> i = cartContent.entrySet().iterator();
+        
+        int result = updateWrapper(pstm);
+        
+        TableContainsManager tcm = new TableContainsManager(); 
+        TableContains tc = new TableContains(); 
+        tc.setId_cart(bean.getId_cart());
+        
+        for(Entry<Integer,Integer> entry : bean.getContent().entrySet()){
+        	tc.setId_article(entry.getKey());
+        	tc.setQty(entry.getValue());
+        	tcm.create(conn, tc);
+        }
+        
+        return result;
     }
 
     @Override
     public TableCart read(Connection conn, TableCart bean) {
-        String sql = "select * from cart where id_cart = ? ;";
+        String sql = "select * from cart where id_user = ? ;";
         
         PreparedStatement pstm = preparedStatementWrapper(conn, sql);
-        pstmMapperWrapper(pstm, bean, "id_cart");
+        pstmMapperWrapper(pstm, bean, "id_user");
         ResultSet rset = queryWrapper(pstm);
         
-        return rsetMapperWrapper(rset).get(0);
+        TableCart t = rsetMapperWrapper(rset).get(0);
+        
+        TableContainsManager tcm = new TableContainsManager(); 
+        
+    	List<TableContains> contains = tcm.readAll(conn, t.getId_cart() );
+    	
+    	for(TableContains tcns : contains){
+    		t.addContent(tcns.getId_article(), tcns.getQty());
+    	}
+        
+        return t;
     }
-
+    
     @Override
     public int update(Connection conn, TableCart bean) {
-        String sql = "update cart set id_user = ?, date_checkout = ? where id_cart = ?";
+        String sql = "update cart set id_user = ?, date_checkout = ?, checkout = ? where id_cart = ?";
                 
         PreparedStatement pstm = preparedStatementWrapper(conn, sql);
-        pstmMapperWrapper(pstm, bean, "id_user", "date_checkout", "id_cart");
+        pstmMapperWrapper(pstm, bean, "id_user", "date_checkout", "checkout", "id_cart");
         
         return updateWrapper(pstm);
     }

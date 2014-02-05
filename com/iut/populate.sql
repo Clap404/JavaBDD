@@ -20,7 +20,7 @@ insert into article values
 
 insert into cart values
     (null, 1, true, null),
-    (null, 1, null, null)
+    (null, 1, false, null)
 ;
 
 insert into cart_contains_article values

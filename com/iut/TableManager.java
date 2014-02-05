@@ -21,6 +21,16 @@ public abstract class TableManager<T> implements Crudable <T> {
 		return result;
 	}
 	
+	protected List<?> rsetMapperWrapper(ResultSet rset, ResultSetMapper<?> rsmp){
+		List<?> result = null;
+		try {
+			result = rsmp.mapRersultSetToObject(rset);
+		} catch (SQLException | NoSuchColumnLabel e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
 	protected void pstmMapperWrapper(PreparedStatement pstm, T bean, String... labels){
 		try{
 			psmp.mapObjectToPSTM(pstm, bean, labels);

@@ -12,6 +12,19 @@ public class TableContainsManager extends TableManager<TableContains> {
         this.psmp = new PreparedStatementMapper<TableContains>(TableContains.class);
     }
     
+    public List<TableContains> readAll(Connection conn, int id_cart){
+    	TableContains tc = new TableContains();
+    	tc.setId_cart(id_cart);
+    	
+        String sql = "select id_article, qty_contains from cart_contains_article where id_cart = ? ;";
+        
+        PreparedStatement pstm = preparedStatementWrapper(conn, sql);
+        pstmMapperWrapper(pstm, tc, "id_cart");
+        ResultSet rset = queryWrapper(pstm);
+        
+        return rsetMapperWrapper(rset);
+    }
+    
     public List<TableContains> readAll(Connection conn, TableContains bean){        
         String sql = "select id_cart, id_article, qty_contains from cart_contains_article ;";
         
@@ -20,7 +33,7 @@ public class TableContainsManager extends TableManager<TableContains> {
         
         return rsetMapperWrapper(rset);
     }
-
+    
     @Override
     public int create(Connection conn, TableContains bean) {
         String sql = "insert into cart_contains_article values( ?, ?, ? ) ;";
