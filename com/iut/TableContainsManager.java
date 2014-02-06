@@ -74,5 +74,23 @@ public class TableContainsManager extends TableManager<TableContains> {
         
         return updateWrapper(pstm);
     }
+
+    public int generate(Connection conn) {
+        String sql = "create table if not exists cart_contains_article ("
+                + "id_cart int not null,"
+                + "id_article int not null,"
+                + "qty_contains int default 1,"
+                + "primary key (id_article, id_cart),"
+                + "foreign key (id_article) references article(id_article),"
+                + "foreign key (id_cart) references cart(id_cart)"
+            + ");";
+        PreparedStatement pstm = preparedStatementWrapper(conn, sql);
+        return updateWrapper(pstm);
+    }
     
+    public int drop(Connection conn) {
+        String sql = "drop table if exists cart_contains_article ;";
+        PreparedStatement pstm = preparedStatementWrapper(conn, sql);
+        return updateWrapper(pstm);
+    }
 }

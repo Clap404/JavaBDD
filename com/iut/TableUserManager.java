@@ -68,4 +68,20 @@ public class TableUserManager extends TableManager<TableUser> {
 		return updateWrapper(pstm);
 	}
 	
+	public int generate(Connection conn) {
+	    String sql = "create table if not exists user ("
+	            + "id_user int not null auto_increment,"
+	            + "name_user varchar(32) not null,"
+	            + "password varchar(64) not null,"
+	            + "primary key (id_user)"
+	        + ");";
+	    PreparedStatement pstm = preparedStatementWrapper(conn, sql);
+	    return updateWrapper(pstm);
+	}
+	
+	public int drop(Connection conn) {
+	    String sql = "drop table if exists user ;";
+	    PreparedStatement pstm = preparedStatementWrapper(conn, sql);
+	    return updateWrapper(pstm);
+	}
 }

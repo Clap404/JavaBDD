@@ -1,5 +1,6 @@
 package com.iut;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -81,6 +82,29 @@ public class TableCartManager extends TableManager<TableCart> {
         return t;
     }
     
+    public TableCart readById(Connection conn, int id_cart) {
+    	TableCart bean = new TableCart();
+    	bean.setId_cart(id_cart);
+    	
+    	String sql = "select * from cart where id_cart = ? ;";
+        
+        PreparedStatement pstm = preparedStatementWrapper(conn, sql);
+        pstmMapperWrapper(pstm, bean, "id_cart");
+        ResultSet rset = queryWrapper(pstm);
+        
+        TableCart t = rsetMapperWrapper(rset).get(0);
+        
+        TableContainsManager tcm = new TableContainsManager(); 
+        
+    	List<TableContains> contains = tcm.readAll(conn, t.getId_cart() );
+    	
+    	for(TableContains tcns : contains){
+    		t.addContent(tcns.getId_article(), tcns.getQty());
+    	}
+        
+        return t;
+    }
+    
     @Override
     public int update(Connection conn, TableCart bean) {
         String sql = "update cart set id_user = ?, date_checkout = ?, checkout = ? where id_cart = ?";
@@ -101,4 +125,67 @@ public class TableCartManager extends TableManager<TableCart> {
         return updateWrapper(pstm);
     }
     
+    public int buy(Connection conn, TableCart bean) throws NotEnougthStock{
+    	String sql = "update cart set checkout = true, date_checkout = CURRENT_TIMESTAMP where id_cart = ?";
+    	
+    	PreparedStatement pstm = preparedStatementWrapper(conn, sql);
+        pstmMapperWrapper(pstm, bean, "id_cart");
+        
+        TableArticleManager tam = new TableArticleManager();
+        TableArticle ta = new TableArticle();
+        
+        for(Entry<Integer,Integer> entry : bean.getContent().entrySet()){
+        	ta.setId_article(entry.getKey());
+        	
+        	int stock = tam.read(conn, ta).getStock_article();
+        	if (stock - entry.getValue() < 0)
+        		throw new NotEnougthStock(entry.getKey(), entry.getValue());
+        		
+        	ta.setStock_article( stock - entry.getValue() );
+        	tam.update(conn, ta);
+        }
+        return updateWrapper(pstm);
+    }
+    
+    public int buy(Connection conn, int id_cart) throws NotEnougthStock{
+    	TableCart tc = readById(conn, id_cart);
+    	return buy(conn, tc);
+    }
+    
+    public BigDecimal getPrice(Connection conn, TableCart bean){
+    	TableArticleManager tam = new TableArticleManager();
+    	BigDecimal total = new BigDecimal(0);
+    	for(Entry<Integer,Integer> entry : bean.getContent().entrySet()){
+    		total = total.add(
+    			tam.read(conn, entry.getKey()).getPrice_article()
+    			.multiply(new BigDecimal( entry.getValue() ) )
+    		);
+        }
+    	System.out.println(total);
+    	return total;
+    }
+    
+    public BigDecimal getPrice(Connection conn, int id_cart){
+    	TableCart tc = readById(conn, id_cart);
+    	return getPrice(conn, tc);
+    }
+
+    public int generate(Connection conn) {
+        String sql = "create table if not exists cart ("
+                + "id_cart int not null auto_increment,"
+                + "id_user int not null,"
+                + "checkout boolean not null default false,"
+                + "date_checkout timestamp,"
+                + "primary key (id_cart),"
+                + "foreign key (id_user) references user(id_user)"
+            + ");";
+        PreparedStatement pstm = preparedStatementWrapper(conn, sql);
+        return updateWrapper(pstm);
+    }
+    
+    public int drop(Connection conn) {
+        String sql = "drop table if exists cart ;";
+        PreparedStatement pstm = preparedStatementWrapper(conn, sql);
+        return updateWrapper(pstm);
+    }
 }

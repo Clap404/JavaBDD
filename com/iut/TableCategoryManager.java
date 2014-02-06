@@ -61,5 +61,20 @@ public class TableCategoryManager extends TableManager<TableCategory> {
         
         return updateWrapper(pstm);
     }
+
+    public int generate(Connection conn) {
+        String sql = "create table if not exists category ("
+                + "id_cat int not null auto_increment,"
+                + "name_cat varchar(32) not null,"
+                + "primary key (id_cat)"
+            + ");";
+        PreparedStatement pstm = preparedStatementWrapper(conn, sql);
+        return updateWrapper(pstm);
+    }
     
+    public int drop(Connection conn) {
+        String sql = "drop table if exists category ;";
+        PreparedStatement pstm = preparedStatementWrapper(conn, sql);
+        return updateWrapper(pstm);
+    }
 }

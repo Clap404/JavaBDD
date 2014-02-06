@@ -3,13 +3,37 @@ package com.iut;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class Lesson4 {
 
     public static void main(String[] args) throws Exception {
         Connection conn = Singleton.DS.getConnection();
         
-        System.out.println("");
+        //génération de la base
+        TableUserManager tUse = new TableUserManager(); 
+        TableCartManager tCar = new TableCartManager(); 
+        TableCategoryManager tCat = new TableCategoryManager(); 
+        TableArticleManager tArt = new TableArticleManager(); 
+        TableContainsManager tCon = new TableContainsManager(); 
+
+        tCon.drop(conn);
+        tArt.drop(conn);
+        tCat.drop(conn);
+        tCar.drop(conn);
+        tUse.drop(conn);
+
+        tUse.generate(conn);
+        tCar.generate(conn);
+        tCat.generate(conn);
+        tArt.generate(conn);
+        tCon.generate(conn);
+        
+        conn.commit();
+        
+        ///////////////////////////////////////////////////////////////////////
+        System.out.println("\nCréation de catégories d'articles");
         TableCategoryManager tcm = new TableCategoryManager();
         
         TableCategory tc = new TableCategory();
@@ -23,7 +47,7 @@ public class Lesson4 {
         display_all(tcm.readAll(conn, null));
         
         ///////////////////////////////////////////////////////////////////////
-        System.out.println("");
+        System.out.println("\nCréation d'articles");
         TableArticleManager tam = new TableArticleManager();
         
         TableArticle ta = new TableArticle();
@@ -68,7 +92,7 @@ public class Lesson4 {
         
         display_all(tam.readAll(conn, null));
         ///////////////////////////////////////////////////////////////////////
-        System.out.println("");
+        System.out.println("\nCréation d'utilisateurs");
         TableUserManager tum = new TableUserManager();
         
         TableUser tu = new TableUser();
@@ -81,7 +105,7 @@ public class Lesson4 {
         
         display_all(tum.readAll(conn, null));
         ///////////////////////////////////////////////////////////////////////
-        System.out.println("");
+        System.out.println("\nCréation de paniers");
         TableCartManager tcam = new TableCartManager();
         
         TableCart tca = new TableCart();
@@ -102,28 +126,53 @@ public class Lesson4 {
         tcam.create(conn, tca);
         
         display_all(tcam.readAll(conn, null));
-		///////////////////////////////////////////////////////////////////////
-		System.out.println("");
-		TableContainsManager tcnsm = new TableContainsManager();
-		
-		TableContains tcns = new TableContains();
-		tcns.setId_article(5);
-		tcns.setId_cart(2);
-		tcns.setQty(0);
-		tcnsm.update(conn, tcns);
-		
-		tcns.setId_article(1);
-		tcns.setQty(2);
-		tcnsm.update(conn, tcns);
-		
-		display_all(tcam.readAll(conn, null));
-		
+        ///////////////////////////////////////////////////////////////////////
+        System.out.println("\nModification de paniers");
+        TableContainsManager tcnsm = new TableContainsManager();
+        
+        TableContains tcns = new TableContains();
+        tcns.setId_article(5);
+        tcns.setId_cart(2);
+        tcns.setQty(0);
+        tcnsm.update(conn, tcns);
+        
+        tcns.setId_article(1);
+        tcns.setQty(2);
+        tcnsm.update(conn, tcns);
+        
+        display_all(tcam.readAll(conn, null));
+        ///////////////////////////////////////////////////////////////////////
+        System.out.println("\nTotaux des paniers");
+        System.out.println( "Prix du panier 1: TTC:" + tcam.getPrice(conn, 1) + " HT:"
+                + tcam.getPrice(conn, 1).multiply(new BigDecimal("0.8")) );
+        System.out.println( "Prix du panier 2: TTC:" + tcam.getPrice(conn, 2) + " HT:"
+                + tcam.getPrice(conn, 2).multiply(new BigDecimal("0.8")) );
+        
+        ///////////////////////////////////////////////////////////////////////
+        
+        System.out.println("\nValidation des paniers");
+        tcam.buy(conn, 1);
+        tcam.buy(conn, 2);
+        display_all(tcam.readAll(conn, null));
+        display_all(tam.readAll(conn, null));
+        
+        ///////////////////////////////////////////////////////////////////////
+        System.out.println("\nMeilleures ventes cette semaine:");
+        display_alll(tam.getBestSellers(conn));
+        
         conn.commit();
     }
 
     public static void display_all(List<?> list) {
         for (Object t : list ){
             System.out.println(t);
+        }
+    }
+    
+    public static void display_alll(List<Map<TableArticle, Integer>> list) {
+        for(Map<?,?> m : list){
+            Entry<?,?>  t = m.entrySet().iterator().next();
+            System.out.println( t.getKey().toString() + "\nx " + t.getValue().toString() );
         }
     }
     
