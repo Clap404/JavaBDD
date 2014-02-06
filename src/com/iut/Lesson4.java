@@ -153,7 +153,9 @@ public class Lesson4 {
         System.out.println("\nValidation des paniers");
         tcam.buy(conn, 1);
         tcam.buy(conn, 2);
+        
         display_all(tcam.readAll(conn, null));
+        System.out.println("");
         display_all(tam.readAll(conn, null));
         
         ///////////////////////////////////////////////////////////////////////

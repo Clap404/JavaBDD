@@ -1,0 +1,59 @@
+Voici une version avec assez de fonctionnalités pour faire fonctionner le jeu de
+test donné en cours le 5 février.
+
+
+Une execution de Lesson4 donne le résultat suivant :
+
+Création de catégories d'articles
+name_cat:Appareils Photos, id_cat:1, 
+name_cat:Zooms & Objectifs, id_cat:2, 
+
+Création d'articles
+name_article:Filtre, description_article:, price_article:17.8, id_cat:2, id_article:5, stock_article:17, 
+name_article:Kit Reflex Numérique + 18-55mm, description_article:Indispensable pour tout bon photographe., price_article:530, id_cat:1, id_article:2, stock_article:1, 
+name_article:Objectif 85, description_article:, price_article:354.9, id_cat:2, id_article:4, stock_article:2, 
+name_article:Reflex Numérique, description_article:Il est cher, mais il est bien !, price_article:1600, id_cat:1, id_article:1, stock_article:2, 
+name_article:Zoom 24-105, description_article:, price_article:748, id_cat:2, id_article:3, stock_article:5, 
+
+Création d'utilisateurs
+password:197fdee283ddf055c71813c9abccef83b9cd3283331431c07da05315bd1848c2, name_user:User1, id_user:1, 
+password:3be75b7f11f384356a58f3ded4ea7a309eec642bae501fabdd2be643133d65, name_user:User2, id_user:2, 
+
+Création de paniers
+content:{2=1, 4=1, 5=2}, date_checkout:2014-02-06 20:56:29.0, checkout:false, id_user:1, id_cart:1, 
+content:{1=1, 3=1, 4=1, 5=2}, date_checkout:2014-02-06 20:56:29.0, checkout:false, id_user:2, id_cart:2, 
+
+Modification de paniers
+content:{2=1, 4=1, 5=2}, date_checkout:2014-02-06 20:56:29.0, checkout:false, id_user:1, id_cart:1, 
+content:{1=2, 3=1, 4=1, 5=0}, date_checkout:2014-02-06 20:56:29.0, checkout:false, id_user:2, id_cart:2, 
+
+Totaux des paniers
+920.5
+920.5
+Prix du panier 1: TTC:920.5 HT:736.40
+4302.9
+4302.9
+Prix du panier 2: TTC:4302.9 HT:3442.32
+
+Validation des paniers
+content:{2=1, 4=1, 5=2}, date_checkout:2014-02-06 20:56:30.0, checkout:true, id_user:1, id_cart:1, 
+content:{1=2, 3=1, 4=1, 5=0}, date_checkout:2014-02-06 20:56:30.0, checkout:true, id_user:2, id_cart:2, 
+
+name_article:Filtre, description_article:, price_article:17.8, id_cat:2, id_article:5, stock_article:15, 
+name_article:Kit Reflex Numérique + 18-55mm, description_article:Indispensable pour tout bon photographe., price_article:530, id_cat:1, id_article:2, stock_article:0, 
+name_article:Objectif 85, description_article:, price_article:354.9, id_cat:2, id_article:4, stock_article:0, 
+name_article:Reflex Numérique, description_article:Il est cher, mais il est bien !, price_article:1600, id_cat:1, id_article:1, stock_article:0, 
+name_article:Zoom 24-105, description_article:, price_article:748, id_cat:2, id_article:3, stock_article:4, 
+
+Meilleures ventes cette semaine:
+name_article:Reflex Numérique, description_article:Il est cher, mais il est bien !, price_article:1600, id_cat:1, id_article:1, stock_article:0, 
+x 2
+name_article:Objectif 85, description_article:, price_article:354.9, id_cat:2, id_article:4, stock_article:0, 
+x 2
+name_article:Filtre, description_article:, price_article:17.8, id_cat:2, id_article:5, stock_article:15, 
+x 2
+name_article:Kit Reflex Numérique + 18-55mm, description_article:Indispensable pour tout bon photographe., price_article:530, id_cat:1, id_article:2, stock_article:0, 
+x 1
+name_article:Zoom 24-105, description_article:, price_article:748, id_cat:2, id_article:3, stock_article:4, 
+x 1
+
